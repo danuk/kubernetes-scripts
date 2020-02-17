@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sandbox
+spec:
+  selector:
+    matchLabels:
+      app: sandbox
+  serviceName: sandbox
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: sandbox
+    spec:
+      containers:
+      - name: linux
+        image: danuk/sandbox
+        command: ["/bin/sleep","infinity"]
+        volumeMounts:
+        - name: root
+          mountPath: /root
+  volumeClaimTemplates:
+  - metadata:
+      name: root
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
